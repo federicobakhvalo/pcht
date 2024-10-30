@@ -1,0 +1,41 @@
+
+services:
+  bot:
+    container_name: main-bot
+    build: .
+    env_file: .env
+    depends_on:
+      - db
+
+    volumes:
+      - .:/app
+    networks:
+      - main-network
+  db:
+    container_name: db
+    image: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+      MYSQL_DATABASE: TICKET_DATABASE
+      MYSQL_PASSWORD: 655feda
+      MYSQL_USER: fedyarik
+    volumes:
+      - mysql_data:/var/lib/mysql
+    ports:
+      - "3307:3306"
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "db" ]
+
+    networks:
+      - main-network
+
+
+volumes:
+  mysql_data:
+
+
+networks:
+  main-network:
+    driver: bridge
+
