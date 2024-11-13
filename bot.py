@@ -48,24 +48,29 @@ def check_callback(callback):
 
 
 def handle_ticket_title(message):
-    ticket_title = message.text  # The title entered by the user
-    # print(ticket_title)
-    query = TicketModel.select().where(fn.LOWER(TicketModel.title).contains(ticket_title.lower()))
-
     btn = telebot.types.InlineKeyboardMarkup()
-    if query.count() > 0:
-        for ticket in query:
-            # print(ticket.title)
-            new_type_btn = InlineKeyboardButton(text=f'{ticket.number_of_ticket}. {ticket.title}',
-                                                callback_data=ticket.number_of_ticket)
-            btn.add(new_type_btn)
+    try:
+        ticket_title = message.text  # The title entered by the user
+        # print(ticket_title)
+        query = TicketModel.select().where(fn.LOWER(TicketModel.title).contains(ticket_title.lower()))
 
-    btn.add(InlineKeyboardButton(text='Назад', callback_data='/start'))
-    bot.send_message(
-        message.chat.id,
-        'Результаты' if query.count() > 0 else 'Ничего не найдено',
-        reply_markup=btn
-    )
+
+        if query.count() > 0:
+            for ticket in query:
+                # print(ticket.title)
+                new_type_btn = InlineKeyboardButton(text=f'{ticket.number_of_ticket}. {ticket.title}',
+                                                    callback_data=ticket.number_of_ticket)
+                btn.add(new_type_btn)
+
+        btn.add(InlineKeyboardButton(text='Назад', callback_data='/start'))
+        bot.send_message(
+            message.chat.id,
+            'Результаты' if query.count() > 0 else 'Ничего не найдено',
+            reply_markup=btn
+        )
+    except:
+        btn.add(InlineKeyboardButton(text='Назад', callback_data='/start'))
+        bot.send_message(message.chat.id, 'error',reply_markup=btn)
     # Here you can add more processing logic for ticket_title
 
 
