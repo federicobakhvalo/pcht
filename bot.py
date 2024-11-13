@@ -30,20 +30,24 @@ def check_callback(callback):
     elif callback.data == '/start':
         start_type(callback.message)
     else:
-
-        ticket = TicketModel.get(number_of_ticket=int(callback.data))
-
-        media = [InputMediaPhoto(file_url) for file_url in ticket.files]
-
-        # Send the media group as a single message
-        bot.send_message(callback.message.chat.id, f'{ticket.number_of_ticket} {ticket.title}')
-        bot.send_media_group(callback.message.chat.id, media)
         markup = InlineKeyboardMarkup()
         start_button = InlineKeyboardButton(text="Вернуться к началу", callback_data='/start')
-        markup.add(start_button)
+        try:
+            ticket = TicketModel.get(number_of_ticket=int(callback.data))
+
+            media = [InputMediaPhoto(file_url) for file_url in ticket.files]
+
+        # Send the media group as a single message
+            bot.send_message(callback.message.chat.id, f'{ticket.number_of_ticket} {ticket.title}')
+            bot.send_media_group(callback.message.chat.id, media)
+            markup.add(start_button)
 
         # Send the keyboard
-        bot.send_message(callback.message.chat.id, "Нажмите кнопку ниже, чтобы вернуться к началу", reply_markup=markup)
+            bot.send_message(callback.message.chat.id, "Нажмите кнопку ниже, чтобы вернуться к началу", reply_markup=markup)
+        except:
+
+            markup.add(start_button)
+            bot.send_message(callback.message.chat.id,'Error message',reply_markup=markup)
         # bot.send_photo()
 
 
