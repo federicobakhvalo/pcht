@@ -25,3 +25,20 @@ with my_database.atomic():  # Use atomic transactions for bulk inserts
 
 # Close the database connection
 my_database.close()
+
+print('hello world')
+
+# def create_new_json(file):
+#     all_types=TicketModel.select()
+#     arr=[]
+#     for type in all_types:
+#         print(type.number_of_ticket)
+#         arr.append({'number_of_ticket':type.number_of_ticket,'title':type.title,'text':type.text,'files':type.files})
+#
+#     with open(file,'w' ,encoding='utf-8') as f:
+#         new_dumps=json.dumps(arr)
+#         f.writelines(new_dumps)
+#         print('success update dupmp')
+#
+# print(create_new_json('json-data.json'))
+
