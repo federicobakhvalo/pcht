@@ -81,6 +81,8 @@ db_port = int(os.getenv("DB_PORT", 3306))  # Allow customizable port with a defa
 # Function to initialize the database
 def initialize_database():
     max_retries = 10  # Retry limit for database connection
+    connection = None  # Declare connection outside try block
+    cursor = None
     for attempt in range(max_retries):
         try:
             print(f"Attempting to connect to MySQL ({attempt + 1}/{max_retries})...")

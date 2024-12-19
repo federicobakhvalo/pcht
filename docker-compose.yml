@@ -5,12 +5,14 @@ services:
     build: .
     env_file: .env
     depends_on:
-      - db
-
+      db:
+        condition: service_healthy  # Зависимость от состояния здоровья базы данных
     volumes:
       - .:/app
     networks:
       - main-network
+    command: sh -c "python MySqlConnection.py && python bot.py"
+
   db:
     container_name: db
     image: mysql
@@ -24,18 +26,17 @@ services:
       - mysql_data:/var/lib/mysql
     ports:
       - "3307:3306"
-    healthcheck:
-      test: [ "CMD", "mysqladmin", "ping", "-h", "db" ]
-
     networks:
       - main-network
-
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
 volumes:
   mysql_data:
 
-
 networks:
   main-network:
     driver: bridge
-

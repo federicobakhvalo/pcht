@@ -13,4 +13,4 @@ COPY . /app/
 
 # Set the entry point for the bot
 #CMD ["sh", "-c",  "python bot.py"]
-CMD ["sh", "-c", "python MySqlConnection.py && python bot.py"]
+#CMD ["sh", "-c", "python MySqlConnection.py && python bot.py"]
